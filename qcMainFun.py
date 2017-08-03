@@ -9,7 +9,7 @@ from FileDealer import makeFastDirs
 from QualityController import QualityController
 import os
 from QualityController import fastqcReport
-
+from QualityController import SingleEndQualityController
  
 if __name__ == "__main__" :
     #build the folders for all samples
@@ -23,50 +23,70 @@ if __name__ == "__main__" :
 #         for i in seqFiles:
 #             makeFastDirs(fastqc_root, e, i)
 
-    #view quality of original seq data 
+#     #view quality of original seq data 
 #     expNum = "IWP0005JJ"
 #     data_root = '/data/cofactor_genomics/'
 #     fastqc_root = '/home/xfan/qcTest'
 #     seqFiles = getSeqFiles(data_root, expNum)
-#     
+#      
 #     for i in seqFiles:
 #         data_path = os.path.join(data_root, expNum, i)
 #         qcResult_path = os.path.join(fastqc_root, expNum, i, "raw")
 #         qcControl = QualityController()
 #         qcControl.FastQC(data_path, qcResult_path)
-#     
+
+    #view quality of trimmed seq data 
+    expNum = "IWP0004JJ"
+    data_root = '/data/cofactor_genomics/'
+    fastqc_root = '/home/xfan/qcTest'
+    trimmedSeqFiles = ["S4_sequence_trimmed.fastq.gz", "S5_sequence_trimmed.fastq.gz", "S6_sequence_trimmed.fastq.gz"]
+     
+    for i in trimmedSeqFiles:
+        data_path = os.path.join(data_root, expNum,"trimmed", i)
+        qcResult_path = os.path.join(fastqc_root, expNum, "trimmed")
+        qcControl = QualityController()
+        qcControl.FastQC(data_path, qcResult_path)
+
+
+    
 
     #view quality of original seq data 
 #     expNum = "IWP0005JJ"
 #     data_root = '/data/cofactor_genomics/'
 #     fastqc_root = '/home/xfan/qcTest'
 #     seqFiles = getSeqFiles(data_root, expNum)
-#     qcReport(fastqc_root, expNum, seqFiles)   
+#     fastqcReport(fastqc_root, expNum, seqFiles)   
 
-
+    # trim adpator 
+#     trimQC = SingleEndQualityController()
+#     outroot = "/data/cofactor_genomics/IWP0004JJ/trimmed/"
+#     encoding = "33"
+#     infile = "/data/cofactor_genomics/IWP0004JJ/S4_sequence.txt.gz"
+#     trimQC.Trimmomatic(outroot, encoding, infile)
+ 
 #to filter out rRNA from raw reads
-    qc = QualityController()
-    ref_root = "/data/cofactor_genomics/reference/rRNA"
-    refs = ["rfam_5s_id98.fasta", "rfam_5.8s_id98.fasta", "silva_euk_28s_id98.fasta", "silva_euk_18s_id95.fasta"]
-    refObjs = []
-    for r in refs:
-        file = FileObj(ref_root, r)
-        refObjs.append(file)
-    
-    index_root = "/data/cofactor_genomics/reference/rRNA/sortmeRNA_index"
-    indexs = ["rfam_5s_id98_db", "rfam_5.8s_id98_db", "silva_euk_28s_id98_db", "silva_euk_18s_id95_db"]
-    indexObjs = []
-    for i in indexs:
-        file = FileObj(index_root, i)
-        indexObjs.append(file)
-    
-
-    expNum = "IWP0005JJ"
-    data_root = '/data/cofactor_genomics/'
-    seq_files = getSeqFiles(data_root, expNum)
-    for f in seq_files:
-        readObj = FileObj("/data/cofactor_genomics/IWP0005JJ", f)
-        qc.sortmerna(refObjs, indexObjs, readObj)
+#     qc = QualityController()
+#     ref_root = "/data/cofactor_genomics/reference/rRNA"
+#     refs = ["rfam_5s_id98.fasta", "rfam_5.8s_id98.fasta", "silva_euk_28s_id98.fasta", "silva_euk_18s_id95.fasta"]
+#     refObjs = []
+#     for r in refs:
+#         file = FileObj(ref_root, r)
+#         refObjs.append(file)
+#     
+#     index_root = "/data/cofactor_genomics/reference/rRNA/sortmeRNA_index"
+#     indexs = ["rfam_5s_id98_db", "rfam_5.8s_id98_db", "silva_euk_28s_id98_db", "silva_euk_18s_id95_db"]
+#     indexObjs = []
+#     for i in indexs:
+#         file = FileObj(index_root, i)
+#         indexObjs.append(file)
+#     
+# 
+#     expNum = "IWP0005JJ"
+#     data_root = '/data/cofactor_genomics/'
+#     seq_files = getSeqFiles(data_root, expNum)
+#     for f in seq_files:
+#         readObj = FileObj("/data/cofactor_genomics/IWP0005JJ", f)
+#         qc.sortmerna(refObjs, indexObjs, readObj)
 
         
     

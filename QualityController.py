@@ -198,17 +198,18 @@ class AlignmentControl(object):
 
 class SingleEndQualityController(QualityController):
     def Trimmomatic(self, outroot, encoding, infile):
-        filename = infile.strip('.fastq.gz')
+#         filename = infile.strip('.fastq.gz')
+        filename = infile.strip('.txt.gz')
         outfile = filename + "_trimmed.fastq.gz"
-        outfile = os.path(outroot, outfile)
+        outfile = os.path.join(outroot, outfile)
         
         logfile = filename + "_log"
-        logfile = os.path(outroot, logfile) 
+        logfile = os.path.join(outroot, logfile) 
          
         cmd = "sudo /home/xfan/anaconda3/envs/QC/bin/trimmomatic SE " + infile + " " \
               + outfile + " -phred" + encoding \
               + ' -trimlog ' + logfile \
-              + " ILLUMINACLIP:/home/xfan/anaconda3/pkgs/trimmomatic-0.36-3/share/trimmomatic-0.36-3/adapters/TruSeq3-SE:1:30:11"  
+              + " ILLUMINACLIP:/home/xfan/anaconda3/pkgs/trimmomatic-0.36-3/share/trimmomatic-0.36-3/adapters/TruSeq3-SE.fa:2:30:10"  
         
         try:
             os.system(cmd)
@@ -221,6 +222,8 @@ class SingleEndQualityController(QualityController):
 class PairEndQualityController(QualityController):
     def Trimmomatic(self):
         pass
+    
+    
 
 
 def fastqcReport(root_path, exp, samples): 
@@ -231,7 +234,9 @@ def fastqcReport(root_path, exp, samples):
     for s in samples:
         s2 = s.split(".")[0]
         s2 += "_fastqc"
-        path = os.path.join(root_path, exp, s, "raw", s2, "summary.txt")
+#         path = os.path.join(root_path, exp, s, "raw", s2, "summary.txt")
+        path = os.path.join(root_path, exp, s2, "summary.txt")
+
         with open(path) as file:
             summary = file.readlines()
         summary = [x.strip("\n").split("\t") for x in summary]
